@@ -50,7 +50,7 @@
 	}
 
     function createColor(colors) {
-        var rand = rand();
+        var skip = rand();
         var idx = Math.floor(colors.length * rand());
         var color = colors.splice(idx,1)[0];
 		return color;
@@ -101,7 +101,7 @@
 
 	function renderIcon(opts, canvas) {
 		var remainingColors = hueShift(colors.slice());
-		
+
 		var opts = buildOpts(opts || {}, remainingColors);
 
 		var imageData = createImageData(opts.size);
@@ -131,7 +131,6 @@
 	}
 
 	function createIcon(opts) {
-		var opts = buildOpts(opts || {});
 		var canvas = document.createElement('canvas');
 
 		renderIcon(opts, canvas);
