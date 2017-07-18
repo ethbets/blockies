@@ -34,7 +34,7 @@ Notes
 The defaults of size 8 and scale 4 generate 32x32 pixel icons. Below are some standard sizes that work well. A size larger than 10 will start generating more noisy icons that don't ressemble much.
 
  * 24x24 `{size: 8, scale: 3}`
- * 50x50 `{size: 5, scale: 10}`
+ * 50x50 `{size: 10, scale: 5}`
 
 
 Build
