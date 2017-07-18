@@ -7,6 +7,13 @@ A tiny library for generating blocky identicons.
 
 [**Demo page**](https://rawgit.com/sisou/blockies/master/sample.html)
 
+
+About this fork
+---------------
+
+This fork uses the colors and hue algorithm from [Jazzicons](https://github.com/flyswatter/jazzicon) for generally warmer colors.
+
+
 Use
 ---
 
