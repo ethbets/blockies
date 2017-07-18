@@ -23,15 +23,36 @@
 		return (randseed[3]>>>0) / ((1 << 31)>>>0);
 	}
 
-	function createColor() {
-		//saturation is the whole color spectrum
-		var h = Math.floor(rand() * 360);
-		//saturation goes from 40 to 100, it avoids greyish colors
-		var s = ((rand() * 60) + 40) + '%';
-		//lightness can be anything from 0 to 100, but probabilities are a bell curve around 50%
-		var l = ((rand()+rand()+rand()+rand()) * 25) + '%';
+	// Colors from https://github.com/flyswatter/jazzicon/blob/master/colors.js
+	var colors = [
+		'hsl(182,  99%, 28%)', // '#01888C', // teal
+		'hsl( 28, 100%, 49%)', // '#FC7500', // bright orange
+		'hsl(189,  94%, 19%)', // '#034F5D', // dark teal
+		'hsl( 15,  99%, 49%)', // '#F73F01', // orangered
+		'hsl(341,  97%, 54%)', // '#FC1960', // magenta
+		'hsl(341,  82%, 43%)', // '#C7144C', // raspberry
+		'hsl( 48, 100%, 48%)', // '#F3C100', // goldenrod
+		'hsl(204,  89%, 52%)', // '#1598F2', // lightning blue
+		'hsl(219,  76%, 51%)', // '#2465E1', // sail blue
+		'hsl( 39,  98%, 48%)', // '#F19E02', // gold
+	];
 
-		var color = 'hsl(' + h + ',' + s + ',' + l + ')';
+	// From https://github.com/flyswatter/jazzicon/blob/master/index.js
+	var wobble = 30;
+	function hueShift(colors) {
+		var amount = (rand() * 30) - (wobble / 2);
+		return colors.map(function(hsl) {
+			var hue = parseInt(hsl.substr(4, 3).trim());
+			hue += amount;
+			if(hue > 360) hue -= 360; else if(hue < 0) hue += 360;
+			return 'hsl(' + hue + hsl.substr(7);
+		});
+	}
+
+    function createColor(colors) {
+        var rand = rand();
+        var idx = Math.floor(colors.length * rand());
+        var color = colors.splice(idx,1)[0];
 		return color;
 	}
 
@@ -62,7 +83,7 @@
 		return data;
 	}
 
-	function buildOpts(opts) {
+	function buildOpts(opts, remainingColors) {
 		var newOpts = {};
 
 		newOpts.seed = opts.seed || Math.floor((Math.random()*Math.pow(10,16))).toString(16);
@@ -71,15 +92,17 @@
 
 		newOpts.size = opts.size || 8;
 		newOpts.scale = opts.scale || 4;
-		newOpts.color = opts.color || createColor();
-		newOpts.bgcolor = opts.bgcolor || createColor();
-		newOpts.spotcolor = opts.spotcolor || createColor();
+		newOpts.color = opts.color || createColor(remainingColors);
+		newOpts.bgcolor = opts.bgcolor || createColor(remainingColors);
+		newOpts.spotcolor = opts.spotcolor || createColor(remainingColors);
 
 		return newOpts;
 	}
 
 	function renderIcon(opts, canvas) {
-		var opts = buildOpts(opts || {});
+		var remainingColors = hueShift(colors.slice());
+		
+		var opts = buildOpts(opts || {}, remainingColors);
 
 		var imageData = createImageData(opts.size);
 		var width = Math.sqrt(imageData.length);
